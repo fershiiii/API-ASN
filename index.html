@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ASN441 - Gestión de Estudiantes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+<header>
+  <div class="header-brand">
+    <span class="badge">ASN441</span>
+    <h1>Sistema de Gestión de Estudiantes</h1>
+  </div>
+  <div class="header-right">
+    <div class="status-dot"></div>
+    <span id="api-status">Conectando...</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <h2>Panel de Administración<br>Estudiantil</h2>
+      <p>Gestiona el listado de estudiantes conectado a la base de datos PostgreSQL en Azure a través de la API REST.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="num" id="total-students">—</span>
+        <span class="lbl">Estudiantes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERT -->
+  <div id="alert-box"></div>
+
+  <!-- ── FORM: AGREGAR ESTUDIANTE ── -->
+  <p class="section-title">Agregar Estudiante</p>
+  <div class="form-card">
+    <h3>
+      <span class="icon">➕</span>
+      Nuevo Estudiante
+    </h3>
+    <div class="form-grid">
+      <div class="field">
+        <label for="inp-nombres">Nombres</label>
+        <input type="text" id="inp-nombres" placeholder="Juan Carlos" />
+      </div>
+      <div class="field">
+        <label for="inp-apellidos">Apellidos</label>
+        <input type="text" id="inp-apellidos" placeholder="García López" />
+      </div>
+      <div class="field">
+        <label for="inp-carnet">Número de Carnet</label>
+        <input type="text" id="inp-carnet" placeholder="GL230001" />
+      </div>
+      <div class="field">
+        <label for="inp-edad">Edad</label>
+        <input type="number" id="inp-edad" placeholder="20" min="15" max="60" />
+      </div>
+      <div>
+        <button class="btn btn-primary" onclick="agregarEstudiante()">
+          ＋ Agregar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TABLA DE ESTUDIANTES ── -->
+  <p class="section-title">Listado de Estudiantes</p>
+  <div class="table-card">
+    <div class="table-toolbar">
+      <h3>
+        Estudiantes Registrados
+        <span class="count-badge" id="count-badge">0</span>
+      </h3>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" id="search-input" placeholder="Buscar estudiante..." oninput="filtrarTabla()"/>
+        </div>
+        <button class="btn btn-primary" onclick="cargarEstudiantes()" style="padding:7px 14px;font-size:13px;">
+          ↻ Recargar
+        </button>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Carnet</th>
+            <th>Edad</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-body">
+          <tr class="loading-row">
+            <td colspan="6">
+              <span class="spinner"></span> Cargando estudiantes...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── INTEGRANTES DEL GRUPO ── -->
+  <p class="section-title">Integrantes del Grupo</p>
+  <div class="team-grid">
+
+    <!-- ─── INTEGRANTE 1 ─── -->
+    <div class="member-card">
+      <img src="img/Marcelo.png" alt="Integrante 1" class="member-photo">
+      <div class="member-info">
+        <h4>Marcelo Eduardo Guerrero Rodríguez</h4>
+        <p>Carnet: GR241968</p>
+      </div>
+    </div>
+
+    <!-- ─── INTEGRANTE 2 ─── -->
+    <div class="member-card">
+      <img src="img/Francisco.png" alt="Integrante 2" class="member-photo">
+      <div class="member-info">
+        <h4>Francisco Andrés Alas Vásquez</h4>
+        <p>Carnet: AV250078</p>
+      </div>
+    </div>
+
+    <!-- ─── INTEGRANTE 3 ─── -->
+    <div class="member-card">
+      <img src="img/Kevin.png" alt="Integrante 3" class="member-photo">
+      <div class="member-info">
+        <h4>Kevin Alexander Argueta Alas</h4>
+        <p>Carnet: AA250104</p>
+      </div>
+    </div>
+
+    <!-- ─── INTEGRANTE 4 ─── -->
+    <div class="member-card">
+      <img src="" alt="Integrante 4" class="member-photo">
+      <div class="member-info">
+        <h4></h4>
+        <p>Carnet: GH456789</p>
+      </div>
+    </div>
+
+    <!-- ─── ESCUDO BARCELONA ─── -->
+    <div class="barca-card">
+      <img src="img/Barca.png" alt="Escudo FC Barcelona">
+      <span class="barca-label">FC BARCELONA</span>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer>
+  ASN441 · Facultad de Ingeniería · Escuela de Ingeniería en Computación · Google Cloud
+</footer>
+
+<!-- ═══════════════════════════ SCRIPT ═══════════════════════════ -->
+<script>
+  /* ─────────────────────────────────────────────────────────────
+     CONFIGURACIÓN  ←  CAMBIA ESTA URL POR LA DE TU API EN AZURE
+  ───────────────────────────────────────────────────────────── */
+  const API_BASE = 'https://TU-API.azurewebsites.net';
+
+  let todosLosEstudiantes = [];
+
+  function mostrarAlerta(msg, tipo = 'success') {
+    const box = document.getElementById('alert-box');
+    box.textContent = msg;
+    box.className = tipo;
+    box.style.display = 'block';
+    setTimeout(() => { box.style.display = 'none'; }, 4000);
+  }
+
+  function actualizarContadores(n) {
+    document.getElementById('total-students').textContent = n;
+    document.getElementById('count-badge').textContent = n;
+  }
+
+  async function cargarEstudiantes() {
+    const tbody = document.getElementById('tabla-body');
+    tbody.innerHTML = '<tr class="loading-row"><td colspan="6"><span class="spinner"></span> Cargando...</td></tr>';
+    try {
+      const res = await fetch(`${API_BASE}/estudiantes`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      todosLosEstudiantes = data;
+      renderTabla(data);
+      actualizarContadores(data.length);
+      document.getElementById('api-status').textContent = 'API Conectada';
+    } catch (err) {
+      document.getElementById('api-status').textContent = 'Sin conexión';
+      const demo = [
+        { id: 1, nombres: 'María',   apellidos: 'González',  carnet: 'GG230001', edad: 21 },
+        { id: 2, nombres: 'Carlos',  apellidos: 'Hernández', carnet: 'HC230002', edad: 23 },
+        { id: 3, nombres: 'Andrea',  apellidos: 'Martínez',  carnet: 'MA230003', edad: 20 },
+      ];
+      todosLosEstudiantes = demo;
+      renderTabla(demo);
+      actualizarContadores(demo.length);
+      mostrarAlerta('⚠️ API no disponible — mostrando datos de demo.', 'error');
+    }
+  }
+
+  function renderTabla(lista) {
+    const tbody = document.getElementById('tabla-body');
+    if (lista.length === 0) {
+      tbody.innerHTML = `
+        <tr><td colspan="6">
+          <div class="empty-state">
+            <div class="emoji">📭</div>
+            <p>No hay estudiantes registrados</p>
+          </div>
+        </td></tr>`;
+      return;
+    }
+    tbody.innerHTML = lista.map((e, i) => `
+      <tr>
+        <td style="color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;">${i + 1}</td>
+        <td><strong>${escHtml(e.nombres)}</strong></td>
+        <td>${escHtml(e.apellidos)}</td>
+        <td><span class="carnet-mono">${escHtml(e.carnet ?? e.numero_carnet ?? '—')}</span></td>
+        <td><span class="age-badge">${e.edad} años</span></td>
+        <td>
+          <button class="btn btn-danger btn-sm" onclick="eliminarEstudiante(${e.id})">
+            🗑 Eliminar
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filtrarTabla() {
+    const q = document.getElementById('search-input').value.toLowerCase();
+    const filtrado = todosLosEstudiantes.filter(e =>
+      (e.nombres + ' ' + e.apellidos + ' ' + (e.carnet ?? e.numero_carnet ?? '')).toLowerCase().includes(q)
+    );
+    renderTabla(filtrado);
+  }
+
+  async function agregarEstudiante() {
+    const nombres   = document.getElementById('inp-nombres').value.trim();
+    const apellidos = document.getElementById('inp-apellidos').value.trim();
+    const carnet    = document.getElementById('inp-carnet').value.trim();
+    const edad      = parseInt(document.getElementById('inp-edad').value);
+    if (!nombres || !apellidos || !carnet || !edad) {
+      mostrarAlerta('⚠️ Todos los campos son obligatorios.', 'error');
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/estudiantes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombres, apellidos, carnet, edad })
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      mostrarAlerta('✅ Estudiante agregado correctamente.');
+      document.getElementById('inp-nombres').value = '';
+      document.getElementById('inp-apellidos').value = '';
+      document.getElementById('inp-carnet').value = '';
+      document.getElementById('inp-edad').value = '';
+      cargarEstudiantes();
+    } catch (err) {
+      mostrarAlerta('❌ Error al agregar: ' + err.message, 'error');
+    }
+  }
+
+  async function eliminarEstudiante(id) {
+    if (!confirm('¿Estás seguro de que deseas eliminar este estudiante?')) return;
+    try {
+      const res = await fetch(`${API_BASE}/estudiantes/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      mostrarAlerta('✅ Estudiante eliminado.');
+      cargarEstudiantes();
+    } catch (err) {
+      mostrarAlerta('❌ Error al eliminar: ' + err.message, 'error');
+    }
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  cargarEstudiantes();
+</script>
+</body>
+</html>

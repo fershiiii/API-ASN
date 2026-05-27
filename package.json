@@ -1,0 +1,19 @@
+{
+  "name": "asn",
+  "version": "1.0.0",
+  "description": "Proyecto Multi-Cloud ASN441",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.21.0"
+  }
+}
